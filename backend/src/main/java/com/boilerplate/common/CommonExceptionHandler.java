@@ -1,8 +1,6 @@
 package com.boilerplate.common;
 
 import com.boilerplate.common.dto.ErrorResponseDTO;
-import com.boilerplate.domain.log.entity.ErrorLog;
-import com.boilerplate.domain.log.mapper.LogMapper;
 import com.boilerplate.util.HttpRequestUtils;
 import com.boilerplate.util.JwtProvider;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -21,13 +19,13 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class CommonExceptionHandler {
 
-	private final LogMapper logMapper;
-	private final JwtProvider jwtProvider;
+	// private final LogMapper logMapper;
+	// private final JwtProvider jwtProvider;
 
-	public CommonExceptionHandler(LogMapper logMapper, JwtProvider jwtProvider) {
-		this.logMapper = logMapper;
-        this.jwtProvider = jwtProvider;
-    }
+	// public CommonExceptionHandler(LogMapper logMapper, JwtProvider jwtProvider) {
+	// this.logMapper = logMapper;
+	// this.jwtProvider = jwtProvider;
+	// }
 
 	private ResponseEntity<ErrorResponseDTO> buildErrorResponse(ErrorCode errorCode, String message) {
 		ErrorResponseDTO response = ErrorResponseDTO.builder()
@@ -77,45 +75,47 @@ public class CommonExceptionHandler {
 
 		int httpStatus = errorCode.getStatus().value();
 
-		persistErrorLog(ex, httpStatus, request);
+		// persistErrorLog(ex, httpStatus, request);
 
 		return buildErrorResponse(errorCode, message);
 	}
 
-	private void persistErrorLog(Exception ex, int httpStatus, HttpServletRequest request) {
-		try {
-			ErrorLog log = new ErrorLog();
+	// private void persistErrorLog(Exception ex, int httpStatus, HttpServletRequest
+	// request) {
+	// try {
+	// ErrorLog log = new ErrorLog();
 
-			// 예외 관련
-			log.setExceptionClass(ex.getClass().getName());
-			log.setMessage(truncate(ex.getMessage(), 2000));
-			Throwable rootCause = findRootCause(ex);
-			log.setRootCause(rootCause != null ? rootCause.getClass().getName() : null);
+	// // 예외 관련
+	// log.setExceptionClass(ex.getClass().getName());
+	// log.setMessage(truncate(ex.getMessage(), 2000));
+	// Throwable rootCause = findRootCause(ex);
+	// log.setRootCause(rootCause != null ? rootCause.getClass().getName() : null);
 
-			// HTTP / request 관련
-			log.setHttpStatus(httpStatus);
-			if (request != null) {
-				log.setHttpMethod(request.getMethod());
-				log.setPath(request.getRequestURI());
-				log.setClientIp(HttpRequestUtils.extractClientIp(request));
-				log.setUserAgent(truncate(request.getHeader("User-Agent"), 512));
+	// // HTTP / request 관련
+	// log.setHttpStatus(httpStatus);
+	// if (request != null) {
+	// log.setHttpMethod(request.getMethod());
+	// log.setPath(request.getRequestURI());
+	// log.setClientIp(HttpRequestUtils.extractClientIp(request));
+	// log.setUserAgent(truncate(request.getHeader("User-Agent"), 512));
 
-				String userId = jwtProvider.getUserId(request);
-				if (userId != null) {
-					log.setUserId(Integer.parseInt(userId));
-				} else {
-					log.setUserId(null);
-				}
-			}
+	// String userId = jwtProvider.getUserId(request);
+	// if (userId != null) {
+	// log.setUserId(Integer.parseInt(userId));
+	// } else {
+	// log.setUserId(null);
+	// }
+	// }
 
-			logMapper.insertErrorLog(log);
-		} catch (Exception loggingEx) {
-			loggingEx.printStackTrace();
-		}
-	}
+	// logMapper.insertErrorLog(log);
+	// } catch (Exception loggingEx) {
+	// loggingEx.printStackTrace();
+	// }
+	// }
 
 	private static String truncate(String s, int max) {
-		if (s == null) return null;
+		if (s == null)
+			return null;
 		return s.length() <= max ? s : s.substring(0, max);
 	}
 
@@ -126,6 +126,5 @@ public class CommonExceptionHandler {
 		}
 		return root;
 	}
-
 
 }

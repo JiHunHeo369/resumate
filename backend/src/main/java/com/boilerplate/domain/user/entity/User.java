@@ -1,39 +1,50 @@
 package com.boilerplate.domain.user.entity;
 
-import com.boilerplate.common.entity.BaseEntity;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
+import java.time.LocalDateTime;
 
-@Getter
-@Setter
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(name = "users")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
-public class User extends BaseEntity {
+public class User {
 
-	@Schema(description = "사용자 아이디")
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // identity 자동 증가
 	private Integer id;
 
-	@Schema(description = "로그인 아이디")
+	@Column(nullable = false)
+	private Integer roleId;
+
+	@Column(nullable = false, length = 255)
 	private String loginId;
 
-	@Schema(description = "비밀번호")
-	private String password;
-
-	@Schema(description = "이름")
+	@Column(nullable = false, length = 255)
 	private String name;
 
-	@Schema(description = "이메일")
-	private String email;
+	@Column(length = 255)
+	private String image;
 
-	@Schema(description = "삭제여부")
-	private Boolean deleted;
+	@Column(nullable = false, length = 255)
+	private String password;
 
-	@Schema(description = "권한")
-	private Integer roleId;
+	@Column(nullable = false)
+	private Integer createdBy;
+
+	@Column(nullable = false)
+	private LocalDateTime createdAt;
+
+	private Integer updatedBy;
+
+	private LocalDateTime updatedAt;
 }

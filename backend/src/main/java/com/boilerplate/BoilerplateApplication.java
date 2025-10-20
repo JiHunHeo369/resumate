@@ -5,9 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.context.annotation.ImportResource;
 
-@ImportResource("classpath:log4jdbc-beans.xml")
 @SpringBootApplication(scanBasePackages = "com.boilerplate")
 public class BoilerplateApplication extends SpringBootServletInitializer {
 

@@ -8,31 +8,20 @@ server:
 frontend:
   url: ${FRONTEND_URL:http://localhost:3000}
 
-request:
-  url: "https://ingress-ngi-ingress-ngin-16bb4-107213596-88f6a2e79d1f.kr.lb.naverncp.com/k8s-api/api"
-
-mail:
-  reminder:
-    url: "http://localhost:3000/login"
-
 spring:
   datasource:
-    url: jdbc:mariadb://192.168.30.155:8100/boilerplate
-    driver-class-name: org.mariadb.jdbc.Driver
-    username: root
-    password: 1
-
-mybatis:
-  mapper-locations: classpath:mapper/**/*.xml
-  configuration:
-    map-underscore-to-camel-case: true
-    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
-
-logging:
-  level:
-    org.apache.ibatis: INFO
-    jdbc.sqlonly: INFO
-
+    url: ${SPRING_DATASOURCE_URL}
+    driver-class-name: org.postgresql.Driver
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  jpa:
+    show-sql: true
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
 
 springdoc:
   api-docs:

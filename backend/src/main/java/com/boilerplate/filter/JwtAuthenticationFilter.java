@@ -26,11 +26,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response,
-									@NotNull FilterChain filterChain) throws ServletException, IOException {
-		//로그인 및 회원가입시 예외처리
+			@NotNull FilterChain filterChain) throws ServletException, IOException {
+		// 로그인 및 회원가입시 예외처리
 		List<String> excludedPaths = List.of(
-				"/api/users/login"
-		);
+				"/api/users/login", "/api/test/");
 
 		// 실제 요청 경로
 		String path = request.getServletPath();
