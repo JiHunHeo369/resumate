@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.boilerplate.domain.menu.mapper.MenuMapper">
+    <select id="getAllMenusByUserId" resultType="com.boilerplate.domain.menu.dto.MenuDTO$ResponseMenu">
+        with recursive menu_tree as (
+            select
+                m.id,
+                m.name,
+                m.up_menu_id,
+                m.path,
+                m.sort_order,
+                m.icon,
+                m.name as name_path,
+                1 AS depth,
+                cast(lpad(m.sort_order, 5, '0') as char(1000)) as sort_path
+            from menus m
+            inner join role_menus rm on rm.menu_id = m.id
+            inner join users u on u.role_id = rm.role_id
+            where
+                u.id = 1
+                and m.up_menu_id is null
+            union all
+            select
+                mc.id,
+                mc.name,
+                mc.up_menu_id,
+                mc.path,
+                mc.sort_order,
+                mc.icon,
+                concat(m.name_path, ' > ', mc.name) as name_path,
+                m.depth + 1 as depth,
+                concat(m.sort_path, '/', cast(lpad(mc.sort_order, 5, '0') as char(1000))) as sort_path
+            from menu_tree m
+            inner join menus mc on mc.up_menu_id = m.id
+        )
+        select
+            *
+        from menu_tree
+        order by sort_path
+    </select>
+</mapper>

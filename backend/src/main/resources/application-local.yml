@@ -1,0 +1,48 @@
+system:
+  base:
+    url: http://localhost:8000
+
+server:
+  port: 8000
+
+frontend:
+  url: ${FRONTEND_URL:http://localhost:3000}
+
+request:
+  url: "https://ingress-ngi-ingress-ngin-16bb4-107213596-88f6a2e79d1f.kr.lb.naverncp.com/k8s-api/api"
+
+mail:
+  reminder:
+    url: "http://localhost:3000/login"
+
+spring:
+  datasource:
+    url: jdbc:mariadb://192.168.30.155:8100/boilerplate
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: root
+    password: 1
+
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+
+logging:
+  level:
+    org.apache.ibatis: INFO
+    jdbc.sqlonly: INFO
+
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+jwt:
+  secret:
+    key: S7h!9KmG3yRp$TxVzJq4@FwLbEc2NuYD1
+  expiration:
+    minute: 60
+    refresh-minute: 10080

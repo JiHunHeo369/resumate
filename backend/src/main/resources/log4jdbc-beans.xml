@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:beans="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+         http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--
+      이 XML 파일 전체를 특정 프로파일(local)에서만 적용하려면
+      Java 쪽에서 @ImportResource("classpath:log4jdbc-beans.xml")가 선언된
+      @Configuration 클래스에 @Profile("local")을 붙이세요.
+    -->
+
+    <!-- 실제 DB 연결용 DataSource (DriverManagerDataSource 사용 예시)
+         필요에 따라 HikariDataSource 등으로 교체 가능 -->
+    <bean id="realDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <!-- spring.datasource.* 프로퍼티가 application-{profile}.yml에 있어야 합니다 -->
+        <property name="driverClassName" value="${spring.datasource.driver-class-name}" />
+        <property name="url" value="${spring.datasource.url}" />
+        <property name="username" value="${spring.datasource.username}" />
+        <property name="password" value="${spring.datasource.password}" />
+    </bean>
+
+    <!-- log4jdbc proxy로 감싸서 SQL 및 바인딩 로그를 남기게 함 -->
+    <bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+        <constructor-arg ref="realDataSource" />
+        <property name="logFormatter">
+            <bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter">
+                <!-- 대부분의 구현체가 loggingType 프로퍼티로 문자열을 허용함 -->
+                <property name="loggingType" value="MULTI_LINE" />
+                <!-- 로그 앞에 붙일 접두어 -->
+                <property name="sqlPrefix" value="SQL : " />
+            </bean>
+        </property>
+    </bean>
+
+    <!-- MyBatis SqlSessionFactoryBean 정의
+         - dataSource는 위에서 proxy 처리한 빈을 참조
+         - mapperLocations는 classpath*: 패턴으로 설정
+         - MyBatis 설정은 필요 시 추가로 더 넣을 수 있음 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+
+        <!-- Mapper XML 파일 위치 (와일드카드 사용) -->
+        <property name="mapperLocations">
+            <list>
+                <value>classpath*:mapper/**/*.xml</value>
+            </list>
+        </property>
+
+        <!-- MyBatis 설정 (예: underscore to camel case) -->
+        <property name="configuration">
+            <bean class="org.apache.ibatis.session.Configuration">
+                <property name="mapUnderscoreToCamelCase" value="true" />
+                <!-- 추가 설정 필요 시 여기에 추가 -->
+            </bean>
+        </property>
+    </bean>
+
+
+    <!-- Mapper 인터페이스 스캔 설정
+         - basePackage를 실제 매퍼 인터페이스 패키지로 변경하세요 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- 필수: MapperScannerConfigurer는 스캔할 패키지 지정 -->
+        <property name="basePackage" value="com.boilerplate.**.**.mapper" />
+        <!-- 위에서 생성한 SqlSessionFactoryBean의 bean 이름 지정 -->
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+    </bean>
+
+</beans>

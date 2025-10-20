@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.boilerplate.domain.code.mapper.CodeMapper">
+    <select id="getCodesByGroupCode" resultType="com.boilerplate.domain.code.dto.CodeDTO$ResponseCode">
+        select
+            c.code,
+            c.group_code,
+            c.name,
+            c.id as code_id,
+            case when c.deleted > 0 then '삭제' end
+        from codes c
+        where
+            c.group_code = #{groupCode}
+    </select>
+    <select id="getAllCodeGroups" resultType="com.boilerplate.domain.code.dto.CodeGroupDTO$ResponseCodeGroup">
+        select
+            cg.group_code,
+            cg.group_name,
+            cg.description,
+            cu.name as created_by,
+            cg.created_at,
+            uu.name as update_by,
+            cg.updated_at
+        from code_groups cg
+        left join users cu on cu.id = cg.created_by
+        left join users uu on uu.id = cg.updated_by
+        where
+            cg.editable = 1
+    </select>
+</mapper>

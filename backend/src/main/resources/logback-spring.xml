@@ -1,0 +1,27 @@
+<configuration>
+
+    <!-- 콘솔 appender -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- %msg%n이 있어야 log4jdbc가 만든 멀티라인 SQL의 개행이 보존됩니다 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- MyBatis 로그는 INFO로 낮춰 중복을 피함 -->
+    <logger name="org.apache.ibatis" level="INFO" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="jdbc" level="OFF" additivity="false"/>
+    <logger name="jdbc.sqltiming" level="OFF" additivity="false"/>
+    <logger name="jdbc.audit" level="OFF" additivity="false"/>
+    <logger name="jdbc.resultset" level="OFF" additivity="false"/>
+    <logger name="jdbc.resultsettable" level="OFF" additivity="false"/>
+    <logger name="jdbc.connection" level="OFF" additivity="false"/>
+    <logger name="jdbc.sqlonly" level="INFO" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>

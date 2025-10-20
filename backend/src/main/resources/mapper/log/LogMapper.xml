@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.boilerplate.domain.log.mapper.LogMapper">
+    <insert id="insertErrorLog" parameterType="com.boilerplate.domain.log.entity.ErrorLog" useGeneratedKeys="true" keyProperty="id">
+        insert into error_logs (
+            exception_class,
+            message,
+            root_cause,
+            http_status,
+            http_method,
+            path,
+            user_id,
+            client_ip,
+            user_agent
+        )
+        values (
+             #{exceptionClass},
+             #{message},
+             #{rootCause},
+             #{httpStatus},
+             #{httpMethod},
+             #{path},
+             #{userId},
+             #{clientIp},
+             #{userAgent}
+        )
+    </insert>
+</mapper>
