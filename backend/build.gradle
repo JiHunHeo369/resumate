@@ -5,11 +5,11 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.9.24'
 }
 
-group = 'com.example'
+group = 'com.resumate'
 version = '0.0.1-SNAPSHOT'
 
 springBoot {
-    mainClass = 'com.boilerplate.BoilerplateApplication'
+    mainClass = 'com.resumate.ResumateApplication'
 }
 
 java {

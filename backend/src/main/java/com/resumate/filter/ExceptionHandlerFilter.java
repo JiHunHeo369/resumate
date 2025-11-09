@@ -1,7 +1,7 @@
-package com.boilerplate.filter;
+package com.resumate.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.boilerplate.common.ErrorCode;
+import com.resumate.common.ErrorCode;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

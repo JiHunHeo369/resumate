@@ -1,4 +1,4 @@
-package com.boilerplate.domain.user.entity;
+package com.resumate.domain.user.entity;
 
 import java.time.LocalDateTime;
 

@@ -1,6 +1,6 @@
-package com.boilerplate.domain.user.entity.custom;
+package com.resumate.domain.user.entity.custom;
 
-import com.boilerplate.domain.user.entity.User;
+import com.resumate.domain.user.entity.User;
 import lombok.Data;
 
 @Data

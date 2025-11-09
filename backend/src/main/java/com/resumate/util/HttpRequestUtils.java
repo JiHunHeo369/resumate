@@ -1,4 +1,4 @@
-package com.boilerplate.util;
+package com.resumate.util;
 
 import jakarta.servlet.http.HttpServletRequest;
 

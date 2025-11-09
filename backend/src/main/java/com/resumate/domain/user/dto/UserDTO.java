@@ -1,4 +1,4 @@
-package com.boilerplate.domain.user.dto;
+package com.resumate.domain.user.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

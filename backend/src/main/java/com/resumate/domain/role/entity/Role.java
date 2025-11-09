@@ -1,7 +1,7 @@
-package com.boilerplate.domain.role.entity;
+package com.resumate.domain.role.entity;
 
 
-import com.boilerplate.common.entity.BaseEntity;
+import com.resumate.common.entity.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

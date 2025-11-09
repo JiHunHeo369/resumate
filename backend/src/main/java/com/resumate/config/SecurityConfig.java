@@ -1,8 +1,8 @@
-package com.boilerplate.config;
+package com.resumate.config;
 
-import com.boilerplate.filter.ExceptionHandlerFilter;
-import com.boilerplate.filter.JwtAuthenticationFilter;
-import com.boilerplate.util.JwtProvider;
+import com.resumate.filter.ExceptionHandlerFilter;
+import com.resumate.filter.JwtAuthenticationFilter;
+import com.resumate.util.JwtProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

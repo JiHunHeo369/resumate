@@ -1,4 +1,4 @@
-package com.boilerplate.common;
+package com.resumate.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

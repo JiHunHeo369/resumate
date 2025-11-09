@@ -1,6 +1,6 @@
-package com.boilerplate.filter;
+package com.resumate.filter;
 
-import com.boilerplate.util.JwtProvider;
+import com.resumate.util.JwtProvider;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;

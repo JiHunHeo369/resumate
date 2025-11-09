@@ -1,4 +1,4 @@
-package com.boilerplate.common.dto;
+package com.resumate.common.dto;
 
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;

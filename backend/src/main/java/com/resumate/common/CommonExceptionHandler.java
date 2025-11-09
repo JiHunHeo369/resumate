@@ -1,8 +1,6 @@
-package com.boilerplate.common;
+package com.resumate.common;
 
-import com.boilerplate.common.dto.ErrorResponseDTO;
-import com.boilerplate.util.HttpRequestUtils;
-import com.boilerplate.util.JwtProvider;
+import com.resumate.common.dto.ErrorResponseDTO;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.boilerplate.common.dto;
+package com.resumate.common.dto;
 
 import lombok.Builder;
 import lombok.Data;

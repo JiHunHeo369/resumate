@@ -1,11 +1,10 @@
-package com.boilerplate.domain.user.controller;
+package com.resumate.domain.user.controller;
 
-import com.boilerplate.domain.user.dto.UserDTO;
-import com.boilerplate.domain.user.service.UserService;
+import com.resumate.domain.user.dto.UserDTO;
+import com.resumate.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

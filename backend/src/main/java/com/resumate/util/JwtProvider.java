@@ -1,7 +1,7 @@
-package com.boilerplate.util;
+package com.resumate.util;
 
-import com.boilerplate.common.CommonApiException;
-import com.boilerplate.common.ErrorCode;
+import com.resumate.common.CommonApiException;
+import com.resumate.common.ErrorCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

@@ -1,19 +1,13 @@
-package com.boilerplate.domain.user.service;
+package com.resumate.domain.user.service;
 
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.boilerplate.common.CommonApiException;
-import com.boilerplate.common.ErrorCode;
-import com.boilerplate.domain.user.dto.UserDTO;
-import com.boilerplate.domain.user.entity.User;
-import com.boilerplate.domain.user.entity.custom.UserRole;
-import com.boilerplate.util.JwtProvider;
+import com.resumate.domain.user.dto.UserDTO;
+import com.resumate.util.JwtProvider;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

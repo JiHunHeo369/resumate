@@ -1,14 +1,10 @@
+import './styles/globals.css';
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en"> 
-      <body>
-        <header>
-          <h1>My Application</h1>
-        </header>
-        <main>{children}</main>
-        <footer>
-          <p>© 2024 My Application</p>
-        </footer>
+      <body style={{ margin: 0, padding: 0 }}>
+        {children}
       </body>
     </html>
   )
