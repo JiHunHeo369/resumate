@@ -1,16 +1,24 @@
 package com.resumate.domain.user.service;
 
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.resumate.common.CommonApiException;
+import com.resumate.common.ErrorCode;
+import com.resumate.domain.role.entity.QRole;
+import com.resumate.domain.user.dto.UserDTO;
+import com.resumate.domain.user.entity.QUser;
+import com.resumate.domain.user.entity.User;
+import com.resumate.domain.user.entity.custom.UserRole;
+import com.resumate.domain.user.repository.UserRepository;
+import com.resumate.util.JwtProvider;
+import com.resumate.util.PasswordEncryptor;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.resumate.domain.user.dto.UserDTO;
-import com.resumate.util.JwtProvider;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -18,34 +26,53 @@ public class UserService {
 
 	private final JwtProvider jwtProvider;
 
+	private final UserRepository userRepository;
+
+	private final JPAQueryFactory queryFactory;
+
+	private final PasswordEncryptor passwordEncryptor;
+
 	/**
 	 * 로그인
 	 */
 	public UserDTO.LoginResponse login(UserDTO.LoginRequest request, HttpServletResponse response,
 			HttpServletRequest httpRequest) {
 
-		// UserRole userRole = userMapper.findByLoginId(request.getLoginId());
+		QUser u = QUser.user;
+		QRole r = QRole.role;
 
-		// if (userRole == null) {
-		// throw new CommonApiException(ErrorCode.USER_NOT_FOUND);
-		// }
+		UserRole userRole = queryFactory
+				.select(
+						Projections.fields(
+								UserRole.class,
+								u,
+								r.code.as("roleCode")
+						)
+				)
+				.from(u)
+				.join(r).on(u.roleId.eq(r.id))
+				.where(u.loginId.eq(request.getLoginId()))
+				.fetchOne();
 
-		// User user = userRole.getUser();
-		// String roleCode = userRole.getRoleCode();
+		if (userRole == null) {
+			throw new CommonApiException(ErrorCode.USER_NOT_FOUND);
+		}
 
-		// try {
-		// if (!satHash.scVerifyHashVal(request.getPassword(), user.getPassword())) {
-		// throw new CommonApiException(ErrorCode.USER_INVALID_PASSWORD);
-		// }
-		// } catch (Exception e) {
-		// throw new CommonApiException(ErrorCode.USER_INVALID_PASSWORD);
-		// }
+		User user = userRole.getUser();
+		String roleCode = userRole.getRoleCode();
 
-		// // AccessToken, RefreshToken 생성
-		// String accessToken = jwtProvider.createToken(user.getId(), user.getLoginId(),
-		// roleCode);
-		// String refreshToken = jwtProvider.createRefreshToken(user.getId(),
-		// user.getLoginId(), roleCode);
+		 try {
+			 if (!passwordEncryptor.encrypt(request.getPassword()).equals(user.getPassword())) {
+			 	throw new CommonApiException(ErrorCode.USER_INVALID_PASSWORD);
+			 }
+		 } catch (Exception e) {
+			 throw new CommonApiException(ErrorCode.USER_INVALID_PASSWORD);
+		 }
+
+		 // AccessToken, RefreshToken 생성
+		 String accessToken = jwtProvider.createToken(user.getId(), user.getLoginId(), roleCode);
+//		 String refreshToken = jwtProvider.createRefreshToken(user.getId(),
+//		 user.getLoginId(), roleCode);
 
 		// // TODO(배포 시 http 붙이고 secure true로 변경)
 		// ResponseCookie refreshCookie = ResponseCookie.from("refreshToken",
@@ -59,14 +86,12 @@ public class UserService {
 		// response.addHeader("Set-Cookie", refreshCookie.toString());
 
 		// // AccessToken → 응답 헤더
-		// response.setHeader("Authorization", "Bearer " + accessToken);
-
-		// return UserDTO.LoginResponse.builder()
-		// .name(user.getName())
-		// .roleCode(roleCode)
-		// .token(accessToken)
-		// .build();
-		return null;
+		response.setHeader("Authorization", "Bearer " + accessToken);
+		return UserDTO.LoginResponse.builder()
+				.name(user.getName())
+				.roleCode(roleCode)
+				.token(accessToken)
+				.build();
 	}
 
 	/**

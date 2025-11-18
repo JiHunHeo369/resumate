@@ -20,11 +20,7 @@ public class UserDTO {
 		private String loginId;
 
 		@NotBlank(message = "비밀번호는 공백일 수 없습니다.")
-		@Size(min = 8, max = 30)
-		@Pattern(
-				regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?\":{}|<>])(?=.{8,}$).*$",
-				message = "비밀번호는 영문, 숫자, 특수문자를 포함한 8자 이상이어야 합니다."
-		)
+		@Size(max = 30)
 		private String password;
 	}
 
