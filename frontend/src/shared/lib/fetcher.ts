@@ -8,10 +8,10 @@ function buildUrl(url: string, params?: Record<string, any>) {
 async function baseFetch(input: RequestInfo, init?: RequestInit): Promise<Response> {
   const accessToken = sessionStorage.getItem('jwtToken');
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
-
   const response = await fetch(baseUrl + input, {
     ...init,
     headers: {
+      'Content-Type': 'application/json',
       ...(init?.headers || {}),
       Authorization: accessToken ? `Bearer ${accessToken}` : '',
     },
@@ -57,7 +57,6 @@ export async function post(url: string, body?: any, options?: RequestInit) {
     ...options,
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
       ...(options?.headers || {}),
     },
     body: JSON.stringify(body),
@@ -69,7 +68,6 @@ export async function put(url: string, body?: any, options?: RequestInit) {
     ...options,
     method: 'PUT',
     headers: {
-      'Content-Type': 'application/json',
       ...(options?.headers || {}),
     },
     body: JSON.stringify(body),

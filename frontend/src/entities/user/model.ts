@@ -1,12 +1,14 @@
 export interface User {
   id: number;
-  role_id: number;
-  login_id: string;
+  roleId: number;
+  roleCode: string;
+  loginId: string;
   name: string;
   image?: string | null;
   password: string;
-  created_by: number;
-  created_at: string; // 또는 Date
-  updated_by?: number | null;
-  updated_at?: string | null; // 또는 Date
+  createdBy: number;
+  createdAt: string; // 또는 Date
+  updatedBy?: number | null;
+  updatedAt?: string | null; // 또는 Date
+  token?: string;
 }
