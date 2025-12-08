@@ -34,5 +34,5 @@ jwt:
     #resumate_project sha-256
     key: 0eb7a5c2d297f467851bf3f6c95b9f1830c002feaff1329b1acbf261b1d79e33
   expiration:
-    minute: 60
+    minute: 600
     refresh-minute: 10080

@@ -26,6 +26,7 @@ async function baseFetch(input: RequestInfo, init?: RequestInit): Promise<Respon
         headers: { 'Content-Type': 'application/json' },
       });
 
+      debugger;
       if (!refreshRes.ok) throw new Error('토큰 재발급 실패');
 
       const { token: newAccessToken } = await refreshRes.json();

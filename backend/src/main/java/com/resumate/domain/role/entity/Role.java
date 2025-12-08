@@ -12,7 +12,8 @@ import lombok.experimental.SuperBuilder;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
+@Getter
+@Setter
 @Entity
 @Table(name = "roles")
 public class Role extends BaseEntity {

@@ -2,17 +2,17 @@ package com.resumate.domain.user.entity;
 
 import java.time.LocalDateTime;
 
+import com.resumate.common.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class User extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // identity 자동 증가
@@ -32,14 +32,4 @@ public class User {
 
 	@Column(nullable = false, length = 255)
 	private String password;
-
-	@Column(nullable = false)
-	private Integer createdBy;
-
-	@Column(nullable = false)
-	private LocalDateTime createdAt;
-
-	private Integer updatedBy;
-
-	private LocalDateTime updatedAt;
 }
