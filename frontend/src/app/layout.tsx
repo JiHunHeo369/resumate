@@ -2,10 +2,12 @@ import './styles/globals.css';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en"> 
-      <body style={{ margin: 0, padding: 0 }}>
+    <html lang='en'>
+      <body
+        style={{ margin: 0, padding: 0 }}
+        className='flex justify-center items-center'>
         {children}
       </body>
     </html>
-  )
+  );
 }
