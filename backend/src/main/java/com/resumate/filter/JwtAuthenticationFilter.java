@@ -1,6 +1,8 @@
 package com.resumate.filter;
 
+import com.resumate.common.CustomUserDetail;
 import com.resumate.util.JwtProvider;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
@@ -13,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -23,28 +26,18 @@ import java.util.List;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	private final JwtProvider jwtProvider;
+	private final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response,
 			@NotNull FilterChain filterChain) throws ServletException, IOException {
-		// 로그인 및 회원가입시 예외처리
-		List<String> excludedPaths = List.of(
-				"/api/users/login", "/api/test/");
-
-		// 실제 요청 경로
-		String path = request.getServletPath();
-
-		if (excludedPaths.stream().anyMatch(path::equals)) {
-			filterChain.doFilter(request, response);
-			return;
-		}
 
 		String header = request.getHeader("Authorization");
 		String accessToken = jwtProvider.extractToken(header);
 
 		try {
 			if (accessToken != null && jwtProvider.validateExpiration(accessToken)) {
-				// Access Token 유효할 때 인증 설정
+
 				Authentication auth = jwtProvider.getAuthentication(accessToken);
 				SecurityContextHolder.getContext().setAuthentication(auth);
 
@@ -71,6 +64,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 						return;
 					}
 				} else {
+					// 일치하는 url 필터 예외처리
+					List<String> excludedPaths = List.of(
+							"/api/users/login"
+							, "/api/users/reissue"
+							, "/swagger-ui/**"
+							, "/api-docs/**"
+					);
+
+					// 실제 요청 경로
+					String path = request.getServletPath();
+
+					if (excludedPaths.stream().anyMatch(pattern -> antPathMatcher.match(pattern, path))) {
+						filterChain.doFilter(request, response);
+						return;
+					}
+
 					// Refresh Token도 없거나 만료됨
 					response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 					return;

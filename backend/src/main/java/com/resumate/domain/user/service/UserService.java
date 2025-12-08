@@ -9,7 +9,6 @@ import com.resumate.domain.user.dto.UserDTO;
 import com.resumate.domain.user.entity.QUser;
 import com.resumate.domain.user.entity.User;
 import com.resumate.domain.user.entity.custom.UserRole;
-import com.resumate.domain.user.repository.UserRepository;
 import com.resumate.util.JwtProvider;
 import com.resumate.util.PasswordEncryptor;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,6 +18,8 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import jakarta.servlet.http.Cookie;
+import io.jsonwebtoken.ExpiredJwtException;
 
 @Service
 @RequiredArgsConstructor
@@ -26,22 +27,15 @@ public class UserService {
 
 	private final JwtProvider jwtProvider;
 
-	private final UserRepository userRepository;
-
 	private final JPAQueryFactory queryFactory;
 
 	private final PasswordEncryptor passwordEncryptor;
 
-	/**
-	 * 로그인
-	 */
-	public UserDTO.LoginResponse login(UserDTO.LoginRequest request, HttpServletResponse response,
-			HttpServletRequest httpRequest) {
-
+	private UserRole getUserRoleByLoginId(String loginId) {
 		QUser u = QUser.user;
 		QRole r = QRole.role;
 
-		UserRole userRole = queryFactory
+		return queryFactory
 				.select(
 						Projections.fields(
 								UserRole.class,
@@ -51,8 +45,17 @@ public class UserService {
 				)
 				.from(u)
 				.join(r).on(u.roleId.eq(r.id))
-				.where(u.loginId.eq(request.getLoginId()))
+				.where(u.loginId.eq(loginId))
 				.fetchOne();
+	}
+
+	/**
+	 * 로그인
+	 */
+	public UserDTO.LoginResponse login(UserDTO.LoginRequest request, HttpServletResponse response,
+			HttpServletRequest httpRequest) {
+
+		UserRole userRole = getUserRoleByLoginId(request.getLoginId());
 
 		if (userRole == null) {
 			throw new CommonApiException(ErrorCode.USER_NOT_FOUND);
@@ -61,29 +64,26 @@ public class UserService {
 		User user = userRole.getUser();
 		String roleCode = userRole.getRoleCode();
 
-		 try {
-			 if (!passwordEncryptor.encrypt(request.getPassword()).equals(user.getPassword())) {
-			 	throw new CommonApiException(ErrorCode.USER_INVALID_PASSWORD);
-			 }
-		 } catch (Exception e) {
-			 throw new CommonApiException(ErrorCode.USER_INVALID_PASSWORD);
-		 }
+		try {
+			if (!passwordEncryptor.encrypt(request.getPassword()).equals(user.getPassword())) {
+				throw new CommonApiException(ErrorCode.USER_INVALID_PASSWORD);
+			}
+		} catch (Exception e) {
+			throw new CommonApiException(ErrorCode.USER_INVALID_PASSWORD);
+		}
 
-		 // AccessToken, RefreshToken 생성
-		 String accessToken = jwtProvider.createToken(user.getId(), user.getLoginId(), roleCode);
-//		 String refreshToken = jwtProvider.createRefreshToken(user.getId(),
-//		 user.getLoginId(), roleCode);
+		// AccessToken, RefreshToken 생성
+		String accessToken = jwtProvider.createToken(user.getId(), user.getLoginId(), roleCode);
+		String refreshToken = jwtProvider.createRefreshToken(user.getId(), user.getLoginId(), roleCode);
 
-		// // TODO(배포 시 http 붙이고 secure true로 변경)
-		// ResponseCookie refreshCookie = ResponseCookie.from("refreshToken",
-		// refreshToken)
-		// .httpOnly(true)
-		// .secure(false)
-		// .path("/")
-		// .sameSite("Lax")
-		// .maxAge((int) (jwtProvider.getRefreshExpirationMinute() * 60))
-		// .build();
-		// response.addHeader("Set-Cookie", refreshCookie.toString());
+		ResponseCookie refreshCookie = ResponseCookie.from("refreshToken",refreshToken)
+			.httpOnly(true)
+			.secure(false)
+			.path("/")
+			.sameSite("Lax")
+			.maxAge((int) (jwtProvider.getRefreshExpirationMinute() * 60))
+			.build();
+		response.addHeader("Set-Cookie", refreshCookie.toString());
 
 		// // AccessToken → 응답 헤더
 		response.setHeader("Authorization", "Bearer " + accessToken);
@@ -98,8 +98,6 @@ public class UserService {
 	 * 로그아웃
 	 */
 	public ResponseEntity<Void> logout(HttpServletResponse response) {
-
-		// TODO(배포 시 secure true로 변경 - https 연결만 허용)
 		ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", "")
 				.httpOnly(true)
 				.secure(false)
@@ -119,48 +117,45 @@ public class UserService {
 	@Transactional
 	public UserDTO.LoginResponse reissueAccessToken(HttpServletRequest request, HttpServletResponse response) {
 
-		// String refreshToken = null;
+		String refreshToken = null;
 
-		// if (request.getCookies() != null) {
-		// for (Cookie cookie : request.getCookies()) {
-		// if ("refreshToken".equals(cookie.getName())) {
-		// refreshToken = cookie.getValue();
-		// break;
-		// }
-		// }
-		// }
+		if (request.getCookies() != null) {
+			for (Cookie cookie : request.getCookies()) {
+				if ("refreshToken".equals(cookie.getName())) {
+					refreshToken = cookie.getValue();
+					break;
+				}
+			}
+		}
 
-		// if (refreshToken == null || !jwtProvider.validateExpiration(refreshToken)) {
-		// throw new CommonApiException(ErrorCode.USER_INVALID_REFRESH_TOKEN);
-		// }
+		if (refreshToken == null || !jwtProvider.validateExpiration(refreshToken)) {
+			throw new CommonApiException(ErrorCode.USER_INVALID_REFRESH_TOKEN);
+		}
 
-		// try {
-		// String newAccessToken =
-		// jwtProvider.createAccessTokenFromRefreshToken(refreshToken);
+		try {
+			String newAccessToken =
+				jwtProvider.createAccessTokenFromRefreshToken(refreshToken);
 
-		// response.setHeader("Authorization", "Bearer " + newAccessToken);
-		// response.setHeader("Access-Control-Expose-Headers", "Authorization");
+				response.setHeader("Authorization", "Bearer " + newAccessToken);
+				response.setHeader("Access-Control-Expose-Headers", "Authorization");
 
-		// UserRole userRole =
-		// userMapper.findByLoginId(jwtProvider.getLoginId(newAccessToken));
+				UserRole userRole = getUserRoleByLoginId(jwtProvider.getLoginId(newAccessToken));
 
-		// if (userRole == null) {
-		// throw new CommonApiException(ErrorCode.USER_NOT_FOUND);
-		// }
+			if (userRole == null) {
+				throw new CommonApiException(ErrorCode.USER_NOT_FOUND);
+			}
 
-		// User user = userRole.getUser();
-		// String roleCode = userRole.getRoleCode();
+			User user = userRole.getUser();
+			String roleCode = userRole.getRoleCode();
 
-		// return UserDTO.LoginResponse.builder()
-		// .name(user.getName())
-		// .roleCode(roleCode)
-		// .token(newAccessToken)
-		// .build();
+			return UserDTO.LoginResponse.builder()
+				.name(user.getName())
+				.roleCode(roleCode)
+				.token(newAccessToken)
+				.build();
 
-		// } catch (ExpiredJwtException e) {
-		// throw new CommonApiException(ErrorCode.USER_INVALID_REFRESH_TOKEN);
-		// }
-
-		return null;
+		} catch (ExpiredJwtException e) {
+			throw new CommonApiException(ErrorCode.USER_INVALID_REFRESH_TOKEN);
+		}
 	}
 }

@@ -1,6 +1,7 @@
 package com.resumate.util;
 
 import com.resumate.common.CommonApiException;
+import com.resumate.common.CustomUserDetail;
 import com.resumate.common.ErrorCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -97,22 +98,21 @@ public class JwtProvider {
 
 	public Authentication getAuthentication(String token) {
 
-		String loginId = getLoginId(token);
-		String role = getAuthority(token);
+		// Access Token 유효할 때 인증 설정
+		Claims claims = parseClaims(token);
+		CustomUserDetail userDetail = new CustomUserDetail(
+				claims.get("userId", Integer.class),
+				claims.getSubject(),
+				claims.get("authority", String.class)
+		);
 
 		List<GrantedAuthority> auths = new ArrayList<>();
+		String role = userDetail.getAuthority();
 		if (role != null && !role.isBlank()) {
 			String roleName = role.startsWith("ROLE_") ? role : "ROLE_" + role;
 			auths.add(new SimpleGrantedAuthority(roleName));
 		}
-
-		UserDetails principal = org.springframework.security.core.userdetails.User
-				.withUsername(loginId)
-				.password("N/A")
-				.authorities(auths)
-				.build();
-
-		return new UsernamePasswordAuthenticationToken(principal, null, auths);
+		return new UsernamePasswordAuthenticationToken(userDetail, null, auths);
 	}
 
 	public String getLoginId(String token) {
