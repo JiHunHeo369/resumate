@@ -1,8 +1,6 @@
 package com.resumate.filter;
 
-import com.resumate.common.CustomUserDetail;
 import com.resumate.util.JwtProvider;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;

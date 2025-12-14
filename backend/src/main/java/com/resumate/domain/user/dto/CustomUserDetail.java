@@ -1,4 +1,4 @@
-package com.resumate.common;
+package com.resumate.domain.user.dto;
 
 
 import lombok.Builder;

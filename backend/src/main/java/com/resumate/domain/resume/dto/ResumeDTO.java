@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +16,7 @@ public class ResumeDTO {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public class ResumeListRequest {
+    public static class ResumeListRequest {
 
         @Schema(description = "직무")
         private String jobs;
@@ -30,7 +31,8 @@ public class ResumeDTO {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public class ResumeListResponse {
+    @Builder
+    public static class ResumeListResponse {
         private Integer resumeId;
         private Integer userId;
         private String userName;
@@ -46,7 +48,7 @@ public class ResumeDTO {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public class ResumeCreateRequest {
+    public static class ResumeCreateRequest {
         private String image;
 
         @NotBlank
@@ -69,7 +71,7 @@ public class ResumeDTO {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public class ResumeEducationRequest {
+    public static class ResumeEducationRequest {
 
         private String schoolName;
 
@@ -83,7 +85,7 @@ public class ResumeDTO {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public class ResumeCareerRequest {
+    public static class ResumeCareerRequest {
 
         private String companyName;
 

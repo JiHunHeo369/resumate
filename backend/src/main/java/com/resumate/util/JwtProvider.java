@@ -1,8 +1,8 @@
 package com.resumate.util;
 
-import com.resumate.common.CommonApiException;
-import com.resumate.common.CustomUserDetail;
-import com.resumate.common.ErrorCode;
+import com.resumate.common.exception.CommonApiException;
+import com.resumate.domain.user.dto.CustomUserDetail;
+import com.resumate.common.exception.ErrorCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -14,7 +14,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;

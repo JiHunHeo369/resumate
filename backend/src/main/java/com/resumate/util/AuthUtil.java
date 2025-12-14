@@ -1,8 +1,6 @@
 package com.resumate.util;
 
-import com.resumate.common.CustomUserDetail;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
+import com.resumate.domain.user.dto.CustomUserDetail;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.Authentication;
 

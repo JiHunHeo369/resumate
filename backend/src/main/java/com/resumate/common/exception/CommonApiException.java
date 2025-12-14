@@ -1,4 +1,4 @@
-package com.resumate.common;
+package com.resumate.common.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

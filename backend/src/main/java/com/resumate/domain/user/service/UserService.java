@@ -2,8 +2,8 @@ package com.resumate.domain.user.service;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.resumate.common.CommonApiException;
-import com.resumate.common.ErrorCode;
+import com.resumate.common.exception.CommonApiException;
+import com.resumate.common.exception.ErrorCode;
 import com.resumate.domain.role.entity.QRole;
 import com.resumate.domain.user.dto.UserDTO;
 import com.resumate.domain.user.entity.QUser;

@@ -38,8 +38,7 @@ public class ResumeService {
 
         // TODO request 조건 달기
         List<ResumeDTO.ResumeListResponse> res = queryFactory
-                .select(Projections.constructor(
-                        ResumeDTO.ResumeListResponse.class,
+                .select(
                         resume.id,
                         resume.userId,
                         user.name,
@@ -48,13 +47,27 @@ public class ResumeService {
                         resume.introduction,
                         resumeJob.code,
                         code.name
-                ))
+                )
                 .from(resume)
                 .leftJoin(user).on(user.id.eq(resume.userId))
                 .leftJoin(resumeJob).on(resumeJob.resume.id.eq(resume.id))
                 .leftJoin(code).on(code.groupCode.eq("jobs")
                         .and(code.code.eq(resumeJob.code)))
-                .fetch();
+                .fetch()
+                .stream()
+                .map(t -> ResumeDTO.ResumeListResponse.builder()
+                        .resumeId(t.get(resume.id))
+                        .userId(t.get(resume.userId))
+                        .userName(t.get(user.name))
+                        .image(t.get(resume.image))
+                        .title(t.get(resume.title))
+                        .introduction(t.get(resume.introduction))
+                        .jobCode(t.get(resumeJob.code))
+                        .jobName(t.get(code.name))
+                        .build()
+                )
+                .toList();
+
 
         return res;
     }
