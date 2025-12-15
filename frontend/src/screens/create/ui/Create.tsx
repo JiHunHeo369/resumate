@@ -1,6 +1,4 @@
-'use client';
-
-export default function Pages() {
+export default function Create() {
   return (
     <div className='flex flex-col gap-8'>
       <div className='flex justify-around items-center w-full'>
