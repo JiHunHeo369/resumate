@@ -21,7 +21,7 @@ export default function Nav() {
               className='cursor-pointer'
               onClick={() => handleMenuClick({ url: 'home', idx: -1 })}
             >
-              RESUMATE
+              🍀 RESUMATE
             </button>
           </h2>
         </div>
