@@ -1,6 +1,8 @@
-package com.resumate.common;
+package com.resumate.global.exception;
 
 import com.resumate.common.dto.ErrorResponseDTO;
+import com.resumate.common.exception.CommonApiException;
+import com.resumate.common.exception.ErrorCode;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +17,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
-public class CommonExceptionHandler {
+public class GlobalExceptionHandler {
 
 	// private final LogMapper logMapper;
 	// private final JwtProvider jwtProvider;
