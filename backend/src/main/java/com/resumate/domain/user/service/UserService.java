@@ -84,7 +84,8 @@ public class UserService {
 			.maxAge((int) (jwtProvider.getRefreshExpirationMinute() * 60))
 			.build();
 		response.addHeader("Set-Cookie", refreshCookie.toString());
-
+		// accesstoken 만료 => refreshtoekn 그때 accescctoken 다시 발급하고 주거든
+		// accesstoken 발급할때 refreshtoken 다시 발급. 탈취 위험이 있어서
 		// // AccessToken → 응답 헤더
 		response.setHeader("Authorization", "Bearer " + accessToken);
 		return UserDTO.LoginResponse.builder()

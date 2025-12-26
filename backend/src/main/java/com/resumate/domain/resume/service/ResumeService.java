@@ -162,6 +162,10 @@ public class ResumeService {
         Resume resume = resumeRepository.findById(resumeId)
                 .orElseThrow(() -> new IllegalArgumentException("Resume not found: " + resumeId));
 
+        if (resumate == null) {
+                throw new CommonApiException(ErrorCode.RESUME_NOT_FOUND);
+        }
+
         // 2. 기본 정보 업데이트
         resume.setIntroduction(request.getIntroduction());
         resume.setImage(request.getImage());
