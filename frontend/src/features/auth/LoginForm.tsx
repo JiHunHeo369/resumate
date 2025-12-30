@@ -1,9 +1,9 @@
 'use client';
 
 import { Button, TextField } from '@mui/material';
-import { useState } from "react";
+import { useState } from 'react';
 import Swal from 'sweetalert2';
-import { useLogin } from '../model/useLogin';
+import { useLogin } from './useLogin';
 
 export function LoginForm() {
   const [loginId, setLoginId] = useState('');
@@ -20,15 +20,14 @@ export function LoginForm() {
     }
   };
 
-
   return (
     <>
       <h1>RESUMATE</h1>
-      <form className="flex justify-center w-full pb-[100px]">
-        <div className="grid grid-cols-1 gap-[10px] w-3/5">
+      <form className='flex justify-center w-full pb-[100px]'>
+        <div className='grid grid-cols-1 gap-[10px] w-3/5'>
           <TextField
-            label="아이디"
-            type="text"
+            label='아이디'
+            type='text'
             value={loginId}
             onChange={(e) => setLoginId(e.target.value)}
             fullWidth
@@ -36,20 +35,19 @@ export function LoginForm() {
           />
 
           <TextField
-            label="비밀번호"
-            type="password"
+            label='비밀번호'
+            type='password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             fullWidth
             required
           />
 
-
           <Button
-            type="submit"
-            variant="contained"
+            type='submit'
+            variant='contained'
             fullWidth
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md disabled:opacity-50"
+            className='bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md disabled:opacity-50'
             onClick={handleSubmit}
           >
             로그인

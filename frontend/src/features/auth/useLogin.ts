@@ -1,10 +1,9 @@
 'use client';
 
-import { loginApi } from '../api/loginApi';
+import { loginApi } from '../../shared/api/auth/loginApi';
 import { User } from '@/entities/user/model';
 
 export function useLogin() {
-
   const login = async (email: string, password: string): Promise<User> => {
     try {
       const user = await loginApi(email, password);
