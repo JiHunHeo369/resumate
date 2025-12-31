@@ -1,12 +1,8 @@
 'use client';
 
 import { Button, TextField } from '@mui/material';
-<<<<<<< HEAD:frontend/src/features/auth/ui/LoginForm.tsx
-import { useState } from "react";
-import { useRouter } from 'next/navigation';
-=======
 import { useState } from 'react';
->>>>>>> 1d6095daaff39b205fd7b0a726b5c0cfadc92615:frontend/src/features/auth/LoginForm.tsx
+import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
 import { useLogin } from './useLogin';
 
