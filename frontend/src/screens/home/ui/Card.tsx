@@ -6,7 +6,7 @@ export default function Card({ data }: CardProps) {
   const router = useRouter();
 
   const goToDetail = () => {
-    router.push(`/detail/${data.resumeId}`);
+    router.push(`/create/${data.resumeId}`);
   };
 
   return (
