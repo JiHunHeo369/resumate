@@ -2,7 +2,7 @@ package com.resumate.domain.code.service;
 
 import com.resumate.domain.code.dto.CodeDTO;
 import com.resumate.domain.code.repository.CodeRepository;
-import com.resumate.common.entity.Code;
+import com.resumate.domain.code.entitiy.Code;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,5 +31,22 @@ public class CodeService {
                         .build())
                 .toList();
     }
-}
 
+    // groupCode로 코드 조회
+    public List<CodeDTO.CodeListResponse> getCodeListByGroupCode(String groupCode) {
+        List<Code> codes = codeRepository.findByGroupCode(groupCode);
+
+        return codes.stream()
+                .map(code -> CodeDTO.CodeListResponse.builder()
+                        .id(code.getId())
+                        .groupCode(code.getGroupCode())
+                        .code(code.getCode())
+                        .name(code.getName())
+                        .createdBy(code.getCreatedBy())
+                        .createdAt(code.getCreatedAt())
+                        .updatedBy(code.getUpdatedBy())
+                        .updatedAt(code.getUpdatedAt())
+                        .build())
+                .toList();
+    }
+}

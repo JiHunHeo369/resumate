@@ -31,7 +31,10 @@ public enum ErrorCode {
 	USER_EXCEEDED_MAX_LOGIN_ATTEMPTS(HttpStatus.BAD_REQUEST, "로그인 시도 횟수가 5회를 초과했습니다. 관리자에게 문의하세요."),
 	USER_SUB_LOGIN_KEY_ALREADY_USED(HttpStatus.BAD_REQUEST, "사용중인 로그인 키 입니다."),
 	USER_DUPLICATE(HttpStatus.BAD_REQUEST, "중복된 유저입니다."),
-	NOT_RESOURCE_OWNER(HttpStatus.FORBIDDEN, "본인이 작성한 글이 아닙니다.");
+	NOT_RESOURCE_OWNER(HttpStatus.FORBIDDEN, "본인이 작성한 글이 아닙니다."),
+
+	// Resume
+	RESUME_NOT_FOUND(HttpStatus.NOT_FOUND, "이력서를 찾을 수 없습니다.");
 
 
 	private final HttpStatus status;

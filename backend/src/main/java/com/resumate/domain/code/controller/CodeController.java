@@ -21,5 +21,10 @@ public class CodeController {
     public ResponseEntity<List<CodeDTO.CodeListResponse>> getCodeList() {
         return ResponseEntity.ok(codeService.getCodeList());
     }
-}
 
+    @GetMapping("/{groupCode}")
+    public ResponseEntity<List<CodeDTO.CodeListResponse>> getCodeListByGroupCode(
+            @PathVariable("groupCode") String groupCode) {
+        return ResponseEntity.ok(codeService.getCodeListByGroupCode(groupCode));
+    }
+}

@@ -2,6 +2,7 @@
 
 import { Button, TextField } from '@mui/material';
 import { useState } from "react";
+import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
 import { useLogin } from '../model/useLogin';
 
@@ -9,12 +10,13 @@ export function LoginForm() {
   const [loginId, setLoginId] = useState('');
   const [password, setPassword] = useState('');
   const { login } = useLogin();
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await login(loginId, password);
-      Swal.fire('로그인 성공!', 'success');
+      router.push('/home');
     } catch {
       Swal.fire('로그인 실패', '아이디 또는 비밀번호를 확인하세요', 'error');
     }

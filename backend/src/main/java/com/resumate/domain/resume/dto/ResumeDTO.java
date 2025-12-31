@@ -95,4 +95,19 @@ public class ResumeDTO {
 
         private LocalDateTime endedAt;
     }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class ResumeDetailResponse {
+        private String image;
+        private String title;
+        private String introduction;
+        private List<ResumeCareerRequest> careers;
+        private List<ResumeEducationRequest> educations;
+        private List<String> certificates;
+        private List<String> jobs;
+        private List<String> skills;
+    }
 }

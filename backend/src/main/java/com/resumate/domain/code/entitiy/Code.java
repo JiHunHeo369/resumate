@@ -1,5 +1,6 @@
-package com.resumate.common.entity;
+package com.resumate.domain.code.entitiy;
 
+import com.resumate.common.entity.BaseEntity;
 
 import jakarta.persistence.*;
 import lombok.*;

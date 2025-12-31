@@ -1,6 +1,5 @@
 package com.resumate.domain.resume.controller;
 
-
 import com.resumate.domain.resume.dto.ResumeDTO;
 import com.resumate.domain.resume.service.ResumeService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,17 +18,24 @@ public class ResumeController {
     private final ResumeService resumeService;
 
     @GetMapping("/")
-    public ResponseEntity<List<ResumeDTO.ResumeListResponse>> getResumeList(@ModelAttribute ResumeDTO.ResumeListRequest request) {
+    public ResponseEntity<List<ResumeDTO.ResumeListResponse>> getResumeList(
+            @ModelAttribute ResumeDTO.ResumeListRequest request) {
         return ResponseEntity.ok(resumeService.getResumeList(request));
     }
 
     @GetMapping("/{resumeId}")
-    public ResponseEntity<ResumeDTO.ResumeListResponse> getResume(@PathVariable("resumeId") Integer resumeId) {
+    public ResponseEntity<ResumeDTO.ResumeDetailResponse> getResume(@PathVariable("resumeId") Integer resumeId) {
         return ResponseEntity.ok(resumeService.getResume(resumeId));
     }
 
     @PostMapping("/")
     public ResponseEntity<Integer> createResume(@RequestBody ResumeDTO.ResumeCreateRequest request) {
         return ResponseEntity.ok(resumeService.createResume(request));
+    }
+
+    @PutMapping("/{resumeId}")
+    public ResponseEntity<Integer> updateResume(@PathVariable("resumeId") Integer resumeId,
+            @RequestBody ResumeDTO.ResumeCreateRequest request) {
+        return ResponseEntity.ok(resumeService.updateResume(resumeId, request));
     }
 }
